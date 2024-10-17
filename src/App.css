@@ -1,0 +1,55 @@
+/* Estilos para el contenedor principal */
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas */
+  gap: 20px; /* Espacio entre las casillas */
+  padding: 20px;
+}
+
+/* Estilos para cada tarjeta de mascota */
+.pet-card {
+  background-color: #f5f5f5; /* Color de fondo para la tarjeta */
+  border: 2px solid #ddd; /* Borde sutil */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+  overflow: hidden;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.pet-card:hover {
+  transform: scale(1.05); /* Agrandar la tarjeta al pasar el ratón */
+}
+
+.pet-card img {
+  max-width: 100%; /* Imagen ocupa el ancho completo */
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 15px; /* Separación entre la imagen y el texto */
+}
+
+.pet-card h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.pet-card p {
+  font-size: 1rem;
+  color: #666;
+  margin: 5px 0;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr 1fr; /* Dos columnas en pantallas medianas */
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+  }
+}
