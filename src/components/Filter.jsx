@@ -4,7 +4,11 @@ import PetList from './PetList';
 const Filter = () => {
     const [pets, setPets] = useState([]); // Todas las mascotas
     const [filteredPets, setFilteredPets] = useState([]); // Mascotas filtradas
-    const [filter, setFilter] = useState(''); // Estado para el criterio de filtrado
+    const [filters, setFilters] = useState({
+        tipo: '',
+        edad: '',
+        genero: ''
+    }); // Filtros
     const [showPets, setShowPets] = useState(false); // Mostrar las mascotas solo después de cargarlas
 
     const fetchPets = async () => {
@@ -23,25 +27,59 @@ const Filter = () => {
         }
     };
 
-    useEffect(() => { // Filtra las mascotas
-        if (filter) { // sólo si hay un filtro
-            const filtered = pets.filter((pet) => pet.tipo.toLowerCase().includes(filter.toLowerCase()));
-            setFilteredPets(filtered);
-        } else {
-            setFilteredPets(pets); // Si no hay filtro, mostrar todos
-        }
-    }, [filter, pets]);
+    useEffect(() => {
+        const filtered = pets.filter((pet) => {
+            return (
+                pet.tipo.toLowerCase().includes(filters.tipo.toLowerCase()) &&
+                pet.edad.toString().includes(filters.edad) &&
+                pet.genero.toLowerCase().includes(filters.genero.toLowerCase())
+            );
+        });
+        setFilteredPets(filtered);
+    }, [filters, pets]);
+
+    const handleFilterChange = (e) => { // Función para cambiar los filtros individualmente
+        const { name, value } = e.target;
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    };
 
     return (
         <div>
             <button onClick={fetchPets}>Mostrar Mascotas</button>
-            <input 
-                type="text" 
-                placeholder="Filtrar por tipo (perro, gato, etc.)"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)} // Actualiza el filtro con el valor ingresado
-            />
-            {showPets && <PetList pets={filteredPets} />} {/* Pasa las mascotas filtradas a PetList */}
+            <form onSubmit={handleSubmit}>
+                <input 
+                    type="text" 
+                    name="tipo"
+                    placeholder="Filtrar por tipo (perro, gato, etc.)"
+                    value={filters.tipo}
+                    onChange={handleFilterChange}
+                />
+                <input 
+                    type="text" 
+                    name="edad"
+                    placeholder="Filtrar por edad"
+                    value={filters.edad}
+                    onChange={handleFilterChange}
+                />
+                <select 
+                    name="genero"
+                    value={filters.genero}
+                    onChange={handleFilterChange}
+                >
+                    <option value="">Todos los géneros</option>
+                    <option value="macho">Macho</option>
+                    <option value="hembra">Hembra</option>
+                </select>
+                <button type="submit">Aplicar Filtros</button>
+            </form>
+            {showPets && <PetList pets={filteredPets} />}
         </div>
     );
 };
